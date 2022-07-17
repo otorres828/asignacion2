@@ -1,7 +1,7 @@
 <?php
 include '../database/db.php';
 
-// NUEVO ACTOR
+// NUEVO CLIENTE
 if (isset($_POST['nuevocliente'])) {
     if (isset($_POST['RIFCliente']) && isset($_POST['Cedula'])
                                 && isset($_POST['NombreC'])
@@ -32,7 +32,7 @@ if (isset($_POST['nuevocliente'])) {
     }
 }
 
-// MODIFICAR ACTOR
+// MODIFICAR CLIENTE
 if (isset($_POST['actualizarcliente'])) {
     if (isset($_POST['RIFCliente']) && isset($_POST['Cedula'])
                                 && isset($_POST['NombreC'])
@@ -45,13 +45,13 @@ if (isset($_POST['actualizarcliente'])) {
         $NombreC = $_POST['NombreC'];
         $DireccionC = $_POST['DireccionC'];
         $TelefonoC = $_POST['TelefonoC'];
-        $StatusC = "A";
+        $StatusC =$_POST['StatusC'];
         $Email = $_POST['Email'];
         $FechaAfiliacion = $_POST['FechaAfiliacion'];
     
         session_start();
         if($_POST['FechaDesafiliacion']==""){
-            $sentencia = $base_de_datos->prepare('UPDATE "CLIENTES" "Cedula"=?, "NombreC"=?, "DireccionC"=?, "TelefonoC"=?, "StatusC"=?, "FechaAfiliacion"=?, "Email"=?
+            $sentencia = $base_de_datos->prepare('UPDATE "CLIENTES" SET "Cedula"=?, "NombreC"=?, "DireccionC"=?, "TelefonoC"=?, "StatusC"=?, "FechaAfiliacion"=?, "Email"=?
                                                WHERE "RIFCliente"=?');
     
             $resultado = $sentencia->execute([$RIFCliente, $Cedula,$NombreC,$DireccionC,$TelefonoC,$StatusC,$FechaAfiliacion,$Email,$RIFCliente]); # Pasar en el mismo orden de los ?
@@ -65,10 +65,10 @@ if (isset($_POST['actualizarcliente'])) {
                     $_SESSION['error']="No se puede tener una fecha de desafiliacion con un estatus activo";        
                     header("Location: ../vistas/clientes.php");
                 }else{
-                    $sentencia = $base_de_datos->prepare('UPDATE "CLIENTES" "Cedula"=?, "NombreC"=?, "DireccionC"=?, "TelefonoC"=?, "StatusC"=?, "FechaAfiliacion"=?, "Email"=?)
+                    $sentencia = $base_de_datos->prepare('UPDATE "CLIENTES" SET "Cedula"=?, "NombreC"=?, "DireccionC"=?, "TelefonoC"=?, "StatusC"=?, "FechaAfiliacion"=?,"FechaDesfiliacion"=? "Email"=?
                     WHERE "RIFCliente"='.$RIFCliente);
         
-                    $resultado = $sentencia->execute([$RIFCliente, $Cedula,$NombreC,$DireccionC,$TelefonoC,$StatusC,$FechaAfiliacion,$Email]); # Pasar en el mismo orden de los ?       
+                    $resultado = $sentencia->execute([$Cedula,$NombreC,$DireccionC,$TelefonoC,$StatusC,$FechaAfiliacion,$FechaDesafiliacion,$Email,$RIFCliente]); 
 
                 }
             }
@@ -88,7 +88,7 @@ if (isset($_POST['actualizarcliente'])) {
     }
 }
 
-// ELIMINAR ACTOR
+// ELIMINAR CLIENTE
 if(isset($_GET['RIFCliente'])){
     $RIFCliente=$_GET['RIFCliente'];
 
